@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SUPER META Dinheiro</title>
+<style>
+:root{--bg:#0d0d14;--card:#1a1a26;--green:#7cff00;--text:#fff}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui;display:flex;justify-content:center}
+.app{width:100%;max-width:420px;min-height:100vh;padding:16px;box-sizing:border-box}
+h1{font-size:28px;margin:10px 0}
+h1 span{color:var(--green)}
+.card{background:var(--card);border:1px solid #00ff6640;border-radius:20px;padding:16px;margin:14px 0}
+.bar{height:14px;background:#222236;border-radius:99px;overflow:hidden;margin:8px 0}
+.fill{height:100%;background:var(--green);width:0%;transition:0.5s}
+input{width:100%;padding:14px;margin:6px 0;border-radius:12px;border:0;background:#222236;color:#fff;box-sizing:border-box}
+.btn{width:100%;padding:16px;background:var(--green);color:#000;border:0;border-radius:16px;font-weight:900;font-size:18px;margin-top:8px}
+.small{font-size:13px;opacity:0.7}
+</style>
+</head>
+<body>
+<div class="app">
+<h1>SUPER META<br><span>dinheiro</span></h1>
+<p class="small">Acompanhe suas metas e poupe com inteligência</p>
+<div class="card">
+<b>Poupado este mês</b>
+<h2 style="color:var(--green);font-size:36px;margin:6px 0" id="total">0 MT</h2>
+<div class="bar"><div class="fill" style="width:70%" id="barT"></div></div>
+</div>
+<input id="nome" placeholder="Ex: Juntar 5000 MT para telefone">
+<input id="valor" type="number" placeholder="Valor total (ex: 5000)">
+<input id="tem" type="number" placeholder="Já tenho (ex: 3000)">
+<button class="btn" onclick="add()">+ Nova meta</button>
+<div id="lista"></div>
+</div>
+<script>
+let metas=JSON.parse(localStorage.getItem('sm')||'[]');
+function render(){
+ let t=0, h='';
+ metas.forEach((m,i)=>{
+  let p=Math.round(m.tem/m.valor*100); if(p>100)p=100; t+=m.tem;
+  h+=`<div class="card"><b>${m.nome}</b><br><small>${m.tem} MT de ${m.valor} MT</small><div class="bar"><div class="fill" style="width:${p}%"></div></div><small>${p}% - falta ${m.valor-m.tem} MT</small><br><br><button onclick="mais(${i})">+ Dinheiro</button> <button onclick="del(${i})">Excluir</button></div>`;
+ });
+ document.getElementById('lista').innerHTML=h;
+ document.getElementById('total').innerText=t+' MT';
+ localStorage.setItem('sm',JSON.stringify(metas));
+}
+function add(){
+ let n=nome.value, v=+valor.value, tt=+tem.value||0;
+ if(!n||!v){alert('Escreve nome e valor');return}
+ metas.unshift({nome:n,valor:v,tem:tt});
+ nome.value='';valor.value='';tem.value='';
+ render();
+}
+function mais(i){let q=+prompt('Quanto juntaste agora?'); if(!q)return; metas[i].tem+=q; render();}
+function del(i){if(confirm('Excluir?')){metas.splice(i,1);render()}}
+render();
+</script>
+</body>
+  </html>
