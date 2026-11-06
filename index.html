@@ -19,7 +19,7 @@
 <script>
 function desbloquear(){
   var c = document.getElementById('codigo').value.trim().toUpperCase();
-  if(["META-100","SUPER-100","HELTON-100"].includes(c)){
+  if(["META-100","SUPER-100","HELTON-100","DONO-HELTON"].
     document.getElementById('paywall').style.display='none';
     localStorage.setItem('pago_super_meta','sim');
   } else {
